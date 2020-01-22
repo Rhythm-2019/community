@@ -1,6 +1,6 @@
 package com.example.community.demo.dto;
 
-public class AccesstokenDYO {
+public class AccesstokenDTO {
     private String client_id;
     private String client_secret;
     private String code;
