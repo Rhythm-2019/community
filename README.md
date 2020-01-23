@@ -17,10 +17,10 @@
 [FlyWay 文档](https://flywaydb.org/getstarted/firststeps/maven)
 
 ### 笔记
-注解  
+* 注解  
 GetMapping Controller Autowired Value Component RequestParam
 
-Git命令  
+* Git命令  
 git statue  
 git add .  
 git commit -m "something"  
@@ -42,7 +42,7 @@ create table USER
 );
 ```
   
-###记录步骤  
+### 记录步骤  
 ##### 2020.01.21  
 1. 编写hello World并运行，需要引用spring-boot-starter-web
 2. Git上传代码到GitHub    
@@ -64,8 +64,8 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 4. 将自己的token通过cookie发送回浏览器保持登录状态（避免服务器突然宕机）
 5. 在数据库中加入bio字段，并引入FlyWay实现同步
 6. 编写前端publish.html页面
-
-###记录问题
+ 
+### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
 ```xml
     <dependency>
