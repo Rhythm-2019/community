@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.UUID;
+
 
 @Controller
 public class AuthorizeController {
@@ -58,7 +58,7 @@ public class AuthorizeController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-
+            user.setAvatarUrl(userInfo.getAvatar_url());
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
 

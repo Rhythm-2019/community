@@ -1,0 +1,16 @@
+/*CSS 样式 function 功能*/
+.f-fr{float: right;}
+.f-fl{float: left;}
+.f-bcg{background-color: #efefef;}
+.f-bcw{background-color: white;}
+.f-w100{width: 100%;}
+.f-p5px{padding: 5px;}
+.f-cr{color: #7e0300;}
+.f-cg{color: #acaca0}
+
+/*CSS 样式 graph 布局*/
+.g-main{}
+
+/*CSS 样式 unit 元件*/
+.u-button-submit{margin-bottom: 20px;}
+.u-img-logo{width: 40px;}

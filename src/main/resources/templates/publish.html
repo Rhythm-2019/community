@@ -8,12 +8,11 @@
     <title>社区</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
-
+    <link rel="stylesheet" th:href="@{css/community.css}" href="css/community.css" type="text/css">
 
 </head>
-<body>
+<body class="f-bcg">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -50,30 +49,37 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="g-main f-bcg">
+<div class="f-bcw g-main container">
     <div class="g-left col-xs-12 col-sm-12 col-md-12 col-lg-9">
         <h2><span class="glyphicon glyphicon-plus"></span>&nbsp&nbsp提问</h2>
         <hr>
-        <form>
+        <form action="/publish" method="post">
             <div class="form-group">
                 <label for="title">标题</label>
-                <input type="text" class="form-control" id="title" placeholder="请输入标题">
+                <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="请输入标题">
             </div>
             <div class="form-group">
                 <label for="content">问题详细</label>
-                <textarea class="form-control" name="detail" id="content" cols="30" rows="10"></textarea>
+                <textarea class="form-control" name="desc" id="content" cols="30" rows="10" th:value="${desc}"></textarea>
             </div>
             <div class="form-group">
-                <label for="tips">标签</label>
-                <input type="text" class="form-control" id="tips" placeholder="请输入标签">
+                <label for="tag">标签</label>
+                <input type="text" class="form-control" name="tag" id="tag" th:value="${tag}" placeholder="请输入标签">
             </div>
-            <button type="submit" class="btn btn-success f-fr">发送</button>
+            <div class="f-fl col-xs-12 col-sm-12 col-md-12 col-lg-9 alert f-p5px">
+                <p class="bg-danger f-cr" th:text="${error}"></p>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 f-fr">
+                <button type="submit" class="btn btn-success f-w100 u-button-submit">发送</button>
+            </div>
         </form>
     </div>
     <div class="g-right col-xs-12 col-sm-12 col-md-12 col-lg-3">
         <h2>提问指南</h2>
-        <p>提问时标题明确，不超过25个字，并在问题补充中详细说明问题，最后记得为自己提出的问题填上标签
-            若有多个标签请用英文逗号隔开</p>
+        <h3>问题发起指南</h3>
+        • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
+        • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
+        • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>
     </div>
 </div>
 </body>
