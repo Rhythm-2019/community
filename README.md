@@ -22,13 +22,14 @@
 * 注解  
 GetMapping Controller Autowired Value Component RequestParam
 
+
 * Git命令  
 git statue  
 git add .  
 git commit -m "something"  
 git push
 
-###  IDEA 快捷键  
+####  IDEA 快捷键  
 ctrl + alt + v  快速创建变量  
 ctrl + d  复制代码  
 ctrl + alt + n 搜索文件  
@@ -117,6 +118,7 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 这里需要处理一下mybatis的驼峰问题
 3. 修正了publish时用户填写不全需要回写的情况
 ##### 2020.01.26 初二  
+
 
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
