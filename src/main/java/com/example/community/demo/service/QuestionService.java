@@ -1,5 +1,6 @@
 package com.example.community.demo.service;
 
+import com.example.community.demo.dto.PaginationDTO;
 import com.example.community.demo.dto.QuestionDTO;
 import com.example.community.demo.mapper.QuestionMapper;
 import com.example.community.demo.mapper.UserMapper;
@@ -21,9 +22,13 @@ public class QuestionService {
     @Autowired(required = false)
     private QuestionMapper questionMapper;
 
-    public List<QuestionDTO> list(){
+    public PaginationDTO list(Integer page, Integer size){
+        PaginationDTO paginationDTO = new PaginationDTO();
+        //这里由于需要一些处理，所以不直接set了
+        Integer totalCount = questionMapper.count();
+        paginationDTO.setPagination(totalCount,page, size);
         //先查一下question表，返回一个列表
-        List<QuestionModel> questionList = questionMapper.list();
+        List<QuestionModel> questionList = questionMapper.list(size*(paginationDTO.getPage()-1), size);
         //新建负责组装两个表格的dto列表
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (QuestionModel question : questionList) {
@@ -35,6 +40,8 @@ public class QuestionService {
             BeanUtils.copyProperties(question,questionDTO);
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+
+        paginationDTO.setQuestionDTOS(questionDTOList);
+        return paginationDTO;
     };
 }

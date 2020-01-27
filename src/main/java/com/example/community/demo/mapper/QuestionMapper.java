@@ -4,6 +4,7 @@ import com.example.community.demo.dto.QuestionDTO;
 import com.example.community.demo.model.QuestionModel;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public interface QuestionMapper {
             "#{tag})")
     void createQuestion(QuestionModel QuestionModel);
 
-    @Select("select * from question")
-    List<QuestionModel> list();
+    @Select("select * from question limit #{page},#{size}")
+    List<QuestionModel> list(@Param("page") Integer page, @Param("size") Integer size);
+
+    @Select("select count(1) from question")
+    Integer count();
 }

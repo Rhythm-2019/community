@@ -103,7 +103,6 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 5. 在数据库中加入bio字段，并引入FlyWay实现同步
 <<<<<<< HEAD
 6. 编写前端publish.html页面，这里css不知道为什么不能更新
-
 ##### 2020.01.24 除夕
 1. 解决css不能更新的问题，顺便弄了热部署
 2. 建立question表，编写QuestionModel和QuestionMapper
@@ -118,7 +117,10 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 这里需要处理一下mybatis的驼峰问题
 3. 修正了publish时用户填写不全需要回写的情况
 ##### 2020.01.26 初二  
-
+1. 实现一下分页功能，发现是需要对整个页面的信息重新封装，把QuestionDTO封装到PaginationDTO里
+2. 这个视频中的DTO其实等同于我理解的VO，这里的model等同于我理解的DTO
+##### 2020.01.27 初三
+1. 还在搞昨天的，把导航栏抽离出来；
 
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
@@ -149,5 +151,5 @@ and resource 然后ctrl alt shift / 选择registry 勾选compiler.automake.allow
 * FlyWay常常会出错，可以用repair指令修复
 * 关于css不更新的问题，需要在浏览器访问http://localhost:8080/css/community.css才会更新
 * mybatis驼峰自动识别：mybatis.configuration.map-underscore-to-camel-case=true
-
+* fastJSON可以自动识别驼峰
 

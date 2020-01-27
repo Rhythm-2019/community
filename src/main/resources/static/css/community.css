@@ -7,7 +7,9 @@
 .f-p5px{padding: 5px;}
 .f-cr{color: #7e0300;}
 .f-cg{color: #acaca0}
-
+.f-brcg{border-right: #efefef solid 0.1px;}
+.f-m0a{margin: 0 auto;}
+.f-tac{text-align: center}
 /*CSS 样式 graph 布局*/
 .g-main{}
 
