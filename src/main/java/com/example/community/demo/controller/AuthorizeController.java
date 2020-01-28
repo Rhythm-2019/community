@@ -5,6 +5,7 @@ import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.UserMapper;
 import com.example.community.demo.model.UserModel;
 import com.example.community.demo.provider.GithubProvider;
+import com.example.community.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,10 @@ public class AuthorizeController {
     @Autowired(required = false)
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -51,15 +56,8 @@ public class AuthorizeController {
 
         if(userInfo != null){
             //Login
-            UserModel user = new UserModel();
-            user.setAccountId(String.valueOf(userInfo.getId()));
-            user.setName(userInfo.getLogin());
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            user.setAvatarUrl(userInfo.getAvatarUrl());
-            userMapper.insert(user);
+
+            String token = userService.createOrUpdateUser(userInfo);
             response.addCookie(new Cookie("token",token));
 
         }else{
@@ -67,5 +65,15 @@ public class AuthorizeController {
         }
         return "redirect:/";
 
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response,
+                        HttpServletRequest request){
+        Cookie token = new Cookie("token", null);
+        token.setMaxAge(0);
+        response.addCookie(token);
+        request.getSession().removeAttribute("userInfo");
+
+        return "redirect:/";
     }
 }

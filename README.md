@@ -96,14 +96,13 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 得access_token，最后编写getuserinfo方法携带access_token模拟发
 送http请求获取用户信息，用户信息是json格式的）
 3. 将登录状态存入session，修改前端页面的登录状态
-
+4. 把常用的url地址放到xml里面
 ##### 2020.01.23
 1. 引入H2，建表
 2. 引入Mybatis，编写DAO(UserMapper)和UserModel
 3. 登录后用UUID生成自己的token，写入数据库中
 4. 将自己的token通过cookie发送回浏览器保持登录状态（避免服务器突然宕机）
 5. 在数据库中加入bio字段，并引入FlyWay实现同步
-<<<<<<< HEAD
 6. 编写前端publish.html页面，这里css不知道为什么不能更新
 ##### 2020.01.24 除夕
 1. 解决css不能更新的问题，顺便弄了热部署
@@ -127,6 +126,15 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 3. 抽取登录验证
 的代码到拦截器里面，拦截器的写法是先写MyConfig继承WebMVCConfigurer接口，编写addinterceptors的函数，
 对registry添加注册器，传递一个封装了自己代码的HandleInterceptor的类，并加上拦截地址。
+##### 2020.01.28  
+1. 编写详情页面
+2. 登录有bug，每次授权登录都要创建，不是很好，所以改成每次登录先校验一下accountId，数据库有就修改没有就
+创建
+3. 完成退出登录
+
+
+
+
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
 ```xml
@@ -158,3 +166,4 @@ and resource 然后ctrl alt shift / 选择registry 勾选compiler.automake.allow
 * mybatis驼峰自动识别：mybatis.configuration.map-underscore-to-camel-case=true
 * fastJSON可以自动识别驼峰
 * 写mapper的时候不能重名
+* 为什么要用redirect:/跳转，是因为直接return页面的地址是不变的，用redirect才回变

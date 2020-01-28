@@ -67,4 +67,29 @@ public class QuestionService {
         paginationDTO.setQuestionDTOS(questionDTOList);
         return paginationDTO;
     }
+
+    public QuestionDTO getById(Integer id) {
+        QuestionModel questionModel = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(questionModel, questionDTO);
+        UserModel userModel = userMapper.findById(questionModel.getCreator());
+        questionDTO.setUserModel(userModel);
+        return questionDTO;
+    }
+
+    public void createOrUpdate(QuestionModel questionModel) {
+        if (questionModel.getId() == null){
+            //创建
+            questionModel.setCommentCount(0);
+            questionModel.setLikeCount(0);
+            questionModel.setViewCount(0);
+            questionModel.setGmtCreate(System.currentTimeMillis());
+            questionModel.setGmtModified(questionModel.getGmtCreate());
+            questionMapper.createQuestion(questionModel);
+        }else{
+            //更新
+            questionModel.setGmtCreate(System.currentTimeMillis());
+            questionMapper.updateQuestion(questionModel);
+        }
+    }
 }

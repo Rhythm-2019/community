@@ -18,4 +18,11 @@ public interface UserMapper {
 
     @Select("select * from user where id = #{id}")
     UserModel findById(@Param("id") Integer id);
+
+    @Select("select * from user where account_id = #{accountId}")
+    UserModel findByAccountId(@Param("accountId") Integer accountId);
+
+    @Select("update user set name = #{name}, token = #{token}, avatar_url = #{avatarUrl}, gmt_modified = #{gmtModified}" +
+            " where account_id = #{accountId}")
+    void update(UserModel userModel);
 }

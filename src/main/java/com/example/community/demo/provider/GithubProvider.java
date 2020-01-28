@@ -20,7 +20,6 @@ public class GithubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String token = response.body().string().split("&")[0].split("=")[1];
-            System.out.println(token);
             return token;
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,7 +35,6 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             GitHubUserDTO gitHubUserDTO = JSON.parseObject(response.body().string(), GitHubUserDTO.class);
-            System.out.println(gitHubUserDTO.getId());
             return gitHubUserDTO;
         } catch (IOException e) {
             e.printStackTrace();

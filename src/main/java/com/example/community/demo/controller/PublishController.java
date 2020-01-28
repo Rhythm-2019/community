@@ -1,13 +1,16 @@
 package com.example.community.demo.controller;
 
 import com.example.community.demo.dto.GitHubUserDTO;
+import com.example.community.demo.dto.QuestionDTO;
 import com.example.community.demo.mapper.QuestionMapper;
 import com.example.community.demo.mapper.UserMapper;
 import com.example.community.demo.model.QuestionModel;
+import com.example.community.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired(required = false)
-    private UserMapper userMapper;
+    private QuestionService questionService;
 
     @Autowired(required = false)
     private QuestionMapper questionMapper;
@@ -28,9 +31,10 @@ public class PublishController {
     }
 
     @PostMapping("/publish")
-    public String doPublish(@RequestParam(name = "title") String title,
-                            @RequestParam(name = "desc") String desc,
-                            @RequestParam(name = "tag") String tag,
+    public String doPublish(@RequestParam(name = "title",required = false) String title,
+                            @RequestParam(name = "desc",required = false) String desc,
+                            @RequestParam(name = "tag",required = false) String tag,
+                            @RequestParam(name = "id",required = false) Integer id,
                             HttpServletRequest request,
                             Model model) {
 
@@ -67,16 +71,24 @@ public class PublishController {
         questionModel.setTitle(title);
         questionModel.setDescription(desc);
         questionModel.setTag(tag);
-        questionModel.setGmtCreate(System.currentTimeMillis());
-        questionModel.setGmtModified(questionModel.getGmtCreate());
-        questionModel.setCommentCount(0);
-        questionModel.setLikeCount(0);
-        questionModel.setViewCount(0);
+        questionModel.setId(id);
         //需要接受一下当前的用户id，突然想起要进行登录验证
         questionModel.setCreator(gitHubUserDTO.getId());
-        questionMapper.createQuestion(questionModel);
+        //这里要判断一下是更新还是创建
+        questionService.createOrUpdate(questionModel);
 
-        return "index";
+        return "redirect:/";
+    }
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                        Model model) {
+        QuestionDTO questionDTO = questionService.getById(id);
+        model.addAttribute("id",id);
+        model.addAttribute("title",questionDTO.getTitle());
+        model.addAttribute("desc",questionDTO.getDescription());
+        model.addAttribute("tag",questionDTO.getTag());
+        return "publish";
     }
 
 

@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${question.title}"></title>
+    <script src="/js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/community.css" type="text/css">
+</head>
+<body class="f-bcg">
+<div th:insert="~{navigation :: nav}"></div>
+<div class="f-bcw g-main container">
+    <div class="g-left f-brcg col-xs-12 col-sm-12 col-md-12 col-lg-9">
+        <h2 th:text="${question.title}"></h2>
+
+        <p class="f-cg">
+            <span th:text="${question.commentCount}"></span> 回复 |
+            <span th:text="${question.viewCount}"></span> 浏览 |
+            <span th:text="${question.likeCount}"></span> 喜欢 |
+            <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd')}"></spqn>
+        </p>
+        <hr/>
+        <div>
+            <p th:text="${question.description}"></p>
+        </div>
+        <hr/>
+        <span th:if="${session.userInfo != null}">
+            <div th:if="${session.userInfo.id == question.userModel.id}">
+                <a th:href="@{'/publish/'+${question.id}}" class="f-cb"><span class="glyphicon glyphicon-pencil"></span>&nbsp编辑</a>
+            </div>
+        </span>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+        <div>
+            <h3>作者信息</h3>
+            <div>
+                <img th:src="${question.userModel.avatarUrl}" class="img-circle u-img-logo f-m10" alt="头像">
+                <span th:text="${question.userModel.name}"></span>
+            </div>
+        </div>
+        <hr/>
+        <h3></h3>
+    </div>
+</div>
+</body>
+</html>
