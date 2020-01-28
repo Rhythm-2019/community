@@ -3,9 +3,10 @@ package com.example.community.demo.dto;
 import lombok.Data;
 
 @Data
-public class GitHubUser {
+public class GitHubUserDTO {
     private String login;
-    private long id;
+    private Integer id;
     private String bio;
     private String avatarUrl;
+    private String accountId;
 }

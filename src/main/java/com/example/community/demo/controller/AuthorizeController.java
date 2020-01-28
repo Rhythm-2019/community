@@ -1,7 +1,7 @@
 package com.example.community.demo.controller;
 
 import com.example.community.demo.dto.AccesstokenDTO;
-import com.example.community.demo.dto.GitHubUser;
+import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.UserMapper;
 import com.example.community.demo.model.UserModel;
 import com.example.community.demo.provider.GithubProvider;
@@ -47,7 +47,7 @@ public class AuthorizeController {
         accesstokenDTO.setState(state);
         accesstokenDTO.setRedirect_uri(redirect_url);
         String githubToken = githubProvider.getAccesstoken(accesstokenDTO);
-        GitHubUser userInfo = githubProvider.getUserInfo(githubToken);
+        GitHubUserDTO userInfo = githubProvider.getUserInfo(githubToken);
 
         if(userInfo != null){
             //Login

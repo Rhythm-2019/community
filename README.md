@@ -20,7 +20,7 @@
 
 ### 笔记
 * 注解  
-GetMapping Controller Autowired Value Component RequestParam
+GetMapping Controller Autowired Value Component RequestParam  Configuration
 
 
 * Git命令  
@@ -44,6 +44,8 @@ alt + enter 修正代码
 ctrl + shift + L  格式化
 F2  来到错误的地方  
 ctrl + shift + up/down  代码向上移动或向下移动
+ctrl + alt + left 回退
+ctrl + =
 
 ### 脚本
 ```sql
@@ -121,7 +123,10 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 2. 这个视频中的DTO其实等同于我理解的VO，这里的model等同于我理解的DTO
 ##### 2020.01.27 初三
 1. 还在搞昨天的，把导航栏抽离出来；
-
+2. 编写我的提问页面
+3. 抽取登录验证
+的代码到拦截器里面，拦截器的写法是先写MyConfig继承WebMVCConfigurer接口，编写addinterceptors的函数，
+对registry添加注册器，传递一个封装了自己代码的HandleInterceptor的类，并加上拦截地址。
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
 ```xml
@@ -152,4 +157,4 @@ and resource 然后ctrl alt shift / 选择registry 勾选compiler.automake.allow
 * 关于css不更新的问题，需要在浏览器访问http://localhost:8080/css/community.css才会更新
 * mybatis驼峰自动识别：mybatis.configuration.map-underscore-to-camel-case=true
 * fastJSON可以自动识别驼峰
-
+* 写mapper的时候不能重名

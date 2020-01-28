@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${sectionName}"></title>
+    <script src="/js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/community.css" type="text/css">
+</head>
+<body class="f-bcg">
+<div th:insert="~{navigation :: nav}"></div>
+<div class="f-bcw g-main container">
+    <div class="g-left f-brcg col-xs-12 col-sm-12 col-md-12 col-lg-9">
+        <h2 th:text="${sectionName}"></h2>
+        <hr>
+        <div class="media" data-th-each="question : ${pagination.questionDTOS}">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object img-rounded u-img-logo" th:src="${question.userModel.avatarUrl}">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading" th:text="${question.title}"></h4>
+                <p class="f-cg"><span th:text="${question.commentCount}"></span> 回复
+                    <span th:text="${question.viewCount}"></span> 浏览
+                    <span th:text="${question.likeCount}"></span> 喜欢
+                    <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd')}"></spqn>
+                </p>
+            </div>
+
+        </div>
+        <div class="center-block">
+            <nav aria-label="Page navigation" class="f-m0a f-tac">
+                <ul class="pagination">
+                    <li th:if="${pagination.showFirstPage}">
+                        <a th:href="@{'/profile/'+${section}(page=1)}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;&lt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagination.showPrevious}" >
+                        <a th:href="@{'/profile/'+${section}(page=${pagination.page - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <li th:each="page:${pagination.pages}" th:class="${pagination.page == page}? 'active':''">
+                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a></li>
+
+                    <li th:if="${pagination.showNext}">
+                        <a th:href="@{'/profile/'+${section}(page=${pagination.page + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${pagination.showEndPage}">
+                        <a th:href="@{'/profile/'+${section}(page=${pagination.totalPages})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt&gt;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+        <ul class="nav nav-pills nav-stacked m-rnav">
+            <li role="presentation" th:class="${section == 'question'}?'active':''">
+                <a  th:href="@{'/profile/question'}">我的问题</a>
+            </li>
+            <li role="presentation" th:class="${section == 'reply'}?'active':''">
+                <a th:href="@{'/profile/reply'}">最新回复</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>

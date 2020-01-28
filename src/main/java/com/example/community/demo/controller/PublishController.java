@@ -1,19 +1,16 @@
 package com.example.community.demo.controller;
 
+import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.QuestionMapper;
 import com.example.community.demo.mapper.UserMapper;
 import com.example.community.demo.model.QuestionModel;
-import com.example.community.demo.model.UserModel;
-import org.h2.command.ddl.CreateTable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -55,27 +52,11 @@ public class PublishController {
             return "publish";
         }
 
-        UserModel user = null;
-        //进行登录验证
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    System.out.println(token);
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        break;
-                    } else {
-                        //有token但是不对的
-                        model.addAttribute("error", new String(("您当前的登录状态异常，请重新登录")));
-                        return "publish";
-                    }
-                }
-            }
-        }
+
+        GitHubUserDTO gitHubUserDTO = (GitHubUserDTO) request.getSession().getAttribute("userInfo");
+
         //根本没有token的情况
-        if (user == null) {
+        if (gitHubUserDTO == null) {
 
             model.addAttribute("error", new String(("请先登录再提问！")));
             return "publish";
@@ -92,7 +73,7 @@ public class PublishController {
         questionModel.setLikeCount(0);
         questionModel.setViewCount(0);
         //需要接受一下当前的用户id，突然想起要进行登录验证
-        questionModel.setCreator(user.getId());
+        questionModel.setCreator(gitHubUserDTO.getId());
         questionMapper.createQuestion(questionModel);
 
         return "index";

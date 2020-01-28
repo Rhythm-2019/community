@@ -12,7 +12,8 @@
 .f-tac{text-align: center}
 /*CSS 样式 graph 布局*/
 .g-main{}
-
+/*CSS 样式 model 模块*/
+.m-rnav{margin-top: 20px;}
 /*CSS 样式 unit 元件*/
 .u-button-submit{margin-bottom: 20px;}
 .u-img-logo{width: 40px;}
