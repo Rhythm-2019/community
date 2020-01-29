@@ -16,8 +16,8 @@
 [Spring 默认数据库连接池文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)  
 [FlyWay 文档](https://flywaydb.org/getstarted/firststeps/maven)  
 [Lombok 文档](https://projectlombok.org/)  
-[thymeleaf 官方文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#setting-attribute-values)
-
+[Thymeleaf 官方文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#setting-attribute-values)  
+[MyBatis Generator 文档](http://mybatis.org/generator/)
 ### 笔记
 * 注解  
 GetMapping Controller Autowired Value Component RequestParam  Configuration
@@ -29,6 +29,8 @@ git add .
 git commit -m "something"  
 git push
 
+* 运行mybatis generator  
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ####  IDEA 快捷键  
 ctrl + alt + v  快速创建变量  
 ctrl + d  复制代码  
@@ -131,6 +133,8 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 2. 登录有bug，每次授权登录都要创建，不是很好，所以改成每次登录先校验一下accountId，数据库有就修改没有就
 创建
 3. 完成退出登录
+4. 用mybatis generator生成代码：先写generatorConfig，然后运行命令，在run和xml里配置好，最后修改自己的代码
+5. 修正自己的代码的过程中会发现一些问题，分页需要引用插件org.mybatis.generator.plugins.RowBoundsPlugin
 
 
 
@@ -167,3 +171,7 @@ and resource 然后ctrl alt shift / 选择registry 勾选compiler.automake.allow
 * fastJSON可以自动识别驼峰
 * 写mapper的时候不能重名
 * 为什么要用redirect:/跳转，是因为直接return页面的地址是不变的，用redirect才回变
+* 官方的分页插件
+```xml
+<plugin xmlns="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>>
+```

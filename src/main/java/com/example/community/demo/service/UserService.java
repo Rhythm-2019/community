@@ -2,40 +2,47 @@ package com.example.community.demo.service;
 
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.UserMapper;
-import com.example.community.demo.model.UserModel;
+import com.example.community.demo.model.User;
+import com.example.community.demo.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class UserService {
 
-    @Autowired(required = false)
+    @Autowired
     private UserMapper userMapper;
 
     public String createOrUpdateUser(GitHubUserDTO gitHubUserDTO) {
-        UserModel userModel = userMapper.findByAccountId(gitHubUserDTO.getId());
-        if(userModel == null){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(String.valueOf(gitHubUserDTO.getId()));
+        List<User> users = userMapper.selectByExample(userExample);
+        User user = new User();
+        if(users.size() == 0){
             //没有就创建
-            userModel.setAccountId(String.valueOf(gitHubUserDTO.getId()));
-            userModel.setName(gitHubUserDTO.getLogin());
+
+            user.setAccountId(String.valueOf(gitHubUserDTO.getId()));
+            user.setName(gitHubUserDTO.getLogin());
             String token = UUID.randomUUID().toString();
-            userModel.setToken(token);
-            userModel.setGmtCreate(System.currentTimeMillis());
-            userModel.setGmtModified(userModel.getGmtCreate());
-            userModel.setAvatarUrl(gitHubUserDTO.getAvatarUrl());
-            userMapper.insert(userModel);
+            user.setToken(token);
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(gitHubUserDTO.getAvatarUrl());
+            userMapper.insert(user);
 
         }else{
             //有就更新
-
-            userModel.setName(gitHubUserDTO.getLogin());
-            userModel.setToken(UUID.randomUUID().toString());
-            userModel.setGmtModified(userModel.getGmtCreate());
-            userModel.setAvatarUrl(gitHubUserDTO.getAvatarUrl());
-            userMapper.update(userModel);
+            user.setName(gitHubUserDTO.getLogin());
+            user.setToken(UUID.randomUUID().toString());
+            user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(gitHubUserDTO.getAvatarUrl());
+            UserExample example = new UserExample();
+            example.createCriteria().andAccountIdEqualTo(String.valueOf(gitHubUserDTO.getId()));
+            userMapper.updateByExampleSelective(user,example);
         }
-        return userModel.getToken();
+        return user.getToken();
     }
 }

@@ -2,7 +2,8 @@ package com.example.community.demo.interceptor;
 
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.UserMapper;
-import com.example.community.demo.model.UserModel;
+import com.example.community.demo.model.User;
+import com.example.community.demo.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
@@ -24,8 +26,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if(cookie.getName().equals("token")){
                     String token = cookie.getValue();
                     //需要对token进行校验
-                    UserModel userModel = userMapper.findByToken(token);
-                    if(userModel != null){
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+
+                    if(users.size() != 0){
+                        User userModel = users.get(0);
                         GitHubUserDTO gitHubUserDTO = new GitHubUserDTO();
                         gitHubUserDTO.setLogin(userModel.getName());
                         gitHubUserDTO.setId(userModel.getId());

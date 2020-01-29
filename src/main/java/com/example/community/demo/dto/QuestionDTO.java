@@ -1,6 +1,6 @@
 package com.example.community.demo.dto;
 
-import com.example.community.demo.model.UserModel;
+import com.example.community.demo.model.User;
 import lombok.Data;
 
 @Data
@@ -16,5 +16,5 @@ public class QuestionDTO {
     private Integer likeCount;
     private String tag;
 
-    private UserModel userModel;
+    private User user;
 }

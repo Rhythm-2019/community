@@ -8,5 +8,5 @@ public class GitHubUserDTO {
     private Integer id;
     private String bio;
     private String avatarUrl;
-    private Integer accountId;
+    private String accountId;
 }

@@ -3,7 +3,6 @@ package com.example.community.demo.controller;
 import com.example.community.demo.dto.AccesstokenDTO;
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.mapper.UserMapper;
-import com.example.community.demo.model.UserModel;
 import com.example.community.demo.provider.GithubProvider;
 import com.example.community.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 
 @Controller
@@ -33,7 +31,7 @@ public class AuthorizeController {
     @Value("${github.redirect.url}")
     private String redirect_url;
 
-    @Autowired(required = false)
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired

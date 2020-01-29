@@ -3,8 +3,7 @@ package com.example.community.demo.controller;
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.dto.QuestionDTO;
 import com.example.community.demo.mapper.QuestionMapper;
-import com.example.community.demo.mapper.UserMapper;
-import com.example.community.demo.model.QuestionModel;
+import com.example.community.demo.model.Question;
 import com.example.community.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,15 +66,15 @@ public class PublishController {
         }
 
         //写入数据库
-        QuestionModel questionModel = new QuestionModel();
-        questionModel.setTitle(title);
-        questionModel.setDescription(desc);
-        questionModel.setTag(tag);
-        questionModel.setId(id);
+        Question question = new Question();
+        question.setTitle(title);
+        question.setDescription(desc);
+        question.setTag(tag);
+        question.setId(id);
         //需要接受一下当前的用户id，突然想起要进行登录验证
-        questionModel.setCreator(gitHubUserDTO.getId());
+        question.setCreator(gitHubUserDTO.getId());
         //这里要判断一下是更新还是创建
-        questionService.createOrUpdate(questionModel);
+        questionService.createOrUpdate(question);
 
         return "redirect:/";
     }

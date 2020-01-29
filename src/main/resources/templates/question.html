@@ -30,7 +30,7 @@
         </div>
         <hr/>
         <span th:if="${session.userInfo != null}">
-            <div th:if="${session.userInfo.id == question.userModel.id}">
+            <div th:if="${session.userInfo.id == question.user.id}">
                 <a th:href="@{'/publish/'+${question.id}}" class="f-cb"><span class="glyphicon glyphicon-pencil"></span>&nbsp编辑</a>
             </div>
         </span>
@@ -39,8 +39,8 @@
         <div>
             <h3>作者信息</h3>
             <div>
-                <img th:src="${question.userModel.avatarUrl}" class="img-circle u-img-logo f-m10" alt="头像">
-                <span th:text="${question.userModel.name}"></span>
+                <img th:src="${question.user.avatarUrl}" class="img-circle u-img-logo f-m10" alt="头像">
+                <span th:text="${question.user.name}"></span>
             </div>
         </div>
         <hr/>
