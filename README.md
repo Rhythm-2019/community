@@ -135,7 +135,11 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 3. 完成退出登录
 4. 用mybatis generator生成代码：先写generatorConfig，然后运行命令，在run和xml里配置好，最后修改自己的代码
 5. 修正自己的代码的过程中会发现一些问题，分页需要引用插件org.mybatis.generator.plugins.RowBoundsPlugin
-
+##### 2020.01.29  
+1. 处理异常，编写error页面，处理一下异常
+##### 2020.01.30
+1. 继续处理异常
+2. 实现阅读数增加的功能
 
 
 

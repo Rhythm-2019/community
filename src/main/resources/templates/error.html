@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>社区</title>
+    <script src="/js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/community.css}" type="text/css">
+
+
+
+</head>
+<body class="f-bcg">
+
+<div class=" g-main container f-m20">
+    <div class="jumbotron">
+        <h1>出错啦！！！</h1>
+        <p th:text="${message}">服务器崩啦，正在抢修您等等再来！</p>
+        <p><a class="btn btn-primary btn-lg" href="/" role="button">Go to Index</a></p>
+    </div>
+</div>
+</body>
+</html>

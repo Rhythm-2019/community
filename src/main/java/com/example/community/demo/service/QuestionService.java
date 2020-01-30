@@ -2,6 +2,9 @@ package com.example.community.demo.service;
 
 import com.example.community.demo.dto.PaginationDTO;
 import com.example.community.demo.dto.QuestionDTO;
+import com.example.community.demo.exception.CustomizeErrorCode;
+import com.example.community.demo.exception.CustomizeException;
+import com.example.community.demo.mapper.QuestionExtMapper;
 import com.example.community.demo.mapper.QuestionMapper;
 import com.example.community.demo.mapper.UserMapper;
 import com.example.community.demo.model.*;
@@ -21,6 +24,9 @@ public class QuestionService {
 
     @Autowired(required = false)
     private QuestionMapper questionMapper;
+
+    @Autowired(required = false)
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size){
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -74,6 +80,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NO_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user= userMapper.selectByPrimaryKey(question.getCreator());
@@ -96,7 +105,18 @@ public class QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(question,questionExample);
+            int updated = questionMapper.updateByExampleSelective(question, questionExample);
+            if(updated != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NO_FOUND);
+            }
         }
+    }
+
+    public void incView(Integer id) {
+
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
