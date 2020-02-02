@@ -138,10 +138,21 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 ##### 2020.01.29  
 1. 处理异常，编写error页面，处理一下异常
 ##### 2020.01.30
-1. 继续处理异常
-2. 实现阅读数增加的功能
+1. 继续处理异常，先编写error.html，发生异常时spring boot的BasicErrorController会自动路由到error.html页面上。我们需要编写在自己
+的service里面找到会发生异常的地方，主动抛出异常，异常的类型可以自定义，再写advice对抛出的异常进行拦截，将异常信息
+传给error.html。但是有一些服务器或者客户端异常我们捕获不了，可以编写controller获取状态码，对状态码进行判断。
+2. 实现阅读数增加的功能，自定义了一个mapper
+##### 2020.01.31
+1. 实现回复功能，建表.
+2. 编写服务端的接口，用postman模拟请求，注意要设置请求头为application/JSON的格式，模拟的时候发现我如果少了参数服务器会报错，所以
+要判断一下参数是不是为空，这些逻辑要抽离到service层，通过判断值是否为空，抛出异常，并对错误码和错误信息进行了封装。
+3. 编写添加评论的接口，通过postman进行测试，加入事务@transactional
+4. 修改question.html并加入js，通过ajax调用写好的接口添加评论
+##### 2020.02.01
+1. 实现展示回复的功能，这里尝试使用了java8的新特性，也可以用首页的方式
 
-
+##### 2020.02.02
+1. 实现二级回复功能的前端逻辑，对接口重构
 
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
@@ -179,3 +190,4 @@ and resource 然后ctrl alt shift / 选择registry 勾选compiler.automake.allow
 ```xml
 <plugin xmlns="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>>
 ```
+* bootstrap里面英文文本不自动换行，可以加上这个样式word-break: break-all;
