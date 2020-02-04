@@ -42,7 +42,10 @@
     where
       ID = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectTag" parameterType="com.example.community.demo.model.Question" resultMap="BaseResultMap">
 
+    select * from QUESTION WHERE TAG REGEXP #{tag,jdbcType=VARCHAR} AND `id` != #{id,jdbcType=INTEGER}
+  </select>
 
 
 </mapper>

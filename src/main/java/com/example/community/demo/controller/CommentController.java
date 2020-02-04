@@ -1,19 +1,19 @@
 package com.example.community.demo.controller;
 
 import com.example.community.demo.dto.CommentCreateDTO;
+import com.example.community.demo.dto.CommentDTO;
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.dto.ResultDTO;
+import com.example.community.demo.enums.CommentTypeEnum;
 import com.example.community.demo.exception.CustomizeErrorCode;
 import com.example.community.demo.model.Comment;
 import com.example.community.demo.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @Controller
@@ -38,9 +38,19 @@ public class CommentController {
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setLikeCount(0);
+        comment.setCommentCount(0);
         commentService.insertComment(comment);
         ResultDTO resultDTO = ResultDTO.okOf();
         return resultDTO;
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO comments(@PathVariable(name = "id") Integer id){
+        List<CommentDTO> commentDTOS = commentService.listByQuestionId(id, CommentTypeEnum.COMMENT);
+        //需要对返回dto
+        ResultDTO resultDTO = ResultDTO.okOf(commentDTOS);
+        return resultDTO;
     }
 }

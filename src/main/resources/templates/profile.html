@@ -21,15 +21,18 @@
         <div class="media" data-th-each="question : ${pagination.questionDTOS}">
             <div class="media-left">
                 <a href="#">
-                    <img class="media-object img-rounded u-img-logo" th:src="${question.userModel.avatarUrl}">
+                    <img class="media-object img-rounded u-img-logo" th:src="${question.user.avatarUrl}">
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading" th:text="${question.title}"></h4>
-                <p class="f-cg"><span th:text="${question.commentCount}"></span> 回复
-                    <span th:text="${question.viewCount}"></span> 浏览
-                    <span th:text="${question.likeCount}"></span> 喜欢
-                    <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd')}"></spqn>
+                <h4 class="media-heading">
+                    <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"> </a>
+                </h4>
+                <p class="f-cg">
+                    回复&nbsp <span th:text="${question.commentCount}"></span>  &nbsp
+                    浏览&nbsp <span th:text="${question.viewCount}"></span>  &nbsp
+                    喜欢&nbsp <span th:text="${question.likeCount}"></span>  &nbsp&nbsp
+                    <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></spqn>
                 </p>
             </div>
 
@@ -38,25 +41,25 @@
             <nav aria-label="Page navigation" class="f-m0a f-tac">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
-                        <a th:href="@{'/profile/'+${section}(page=1)}" aria-label="Previous">
+                        <a href="/?page=1" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showPrevious}" >
-                        <a th:href="@{'/profile/'+${section}(page=${pagination.page - 1})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pagination.page - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
                     <li th:each="page:${pagination.pages}" th:class="${pagination.page == page}? 'active':''">
-                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a></li>
+                        <a th:href="@{/(page=${page})}" th:text="${page}"></a></li>
 
                     <li th:if="${pagination.showNext}">
-                        <a th:href="@{'/profile/'+${section}(page=${pagination.page + 1})}" aria-label="Next">
+                        <a th:href="@{/(page=${pagination.page + 1})}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showEndPage}">
-                        <a th:href="@{'/profile/'+${section}(page=${pagination.totalPages})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pagination.totalPages})}" aria-label="Previous">
                             <span aria-hidden="true">&gt&gt;</span>
                         </a>
                     </li>

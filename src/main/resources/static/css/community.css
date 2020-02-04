@@ -1,28 +1,56 @@
 /*CSS 样式 function 功能*/
 .f-fr{float: right;}
 .f-fl{float: left;}
+
 .f-bcg{background-color: #efefef;}
 .f-bcw{background-color: white;}
+
 .f-w100{width: 100%;}
 .f-p5px{padding: 5px;}
+.f-p15px{padding: 15px;}
 .f-m10{margin: 10px;}
 .f-m20{margin: 20px;}
+.f-m0a{margin: 0 auto;}
+.f-mr10{margin-right: 10px;}
+.f-mt20{margin-top: 10px;}
+.f-mb20{margin-bottom: 20px;}
+
 .f-cr{color: #7e0300;}
 .f-cg{color: #acacac;}
 .f-cb{color: #006aac;}
-.f-brcg{border-right: #efefef solid 0.1px;}
-.f-m0a{margin: 0 auto;}
+
+.f-w100px{width: 100px;}
+.f-maxw500{max-width: 500px;}
+
+.f-brcg{border-right: #efefef solid 1px;}
+
 .f-tac{text-align: center;}
+
 .f-fs15{font-size: 15px;}
 .f-fs12{font-size: 12px;}
-.f-w100px{width: 100px;}
+
 .f-wbwa{word-break: break-all;}
+
+.f-pa{position: absolute;}
+.f-pr{position: relative;}
+
+.f-dn{display: none;}
+.f-dib{display: inline-block;}
+
+.f-cp{cursor: pointer}
+
+.f-bgs1{border:gray solid 1px;}
+
+.f-bs{box-shadow:0 0 9px 3px #999;}
 /*CSS 样式 graph 布局*/
 .g-left{padding: 20px;}
 .g-right{padding: 20px;}
+.g-well{background: #efefef; padding: 20px;border:#efefef solid 1px;border-radius: 10px;}
 /*CSS 样式 model 模块*/
 .m-rnav{margin-top: 20px;}
 /*CSS 样式 unit 元件*/
 .u-button-submit{margin-bottom: 20px;margin-top: 20px;}
 .u-img-logo{width: 40px;}
 .u-content{line-height: 21px;letter-spacing: 2px;font-size: 14px;}
+.u-button-1{color: #006aac;display: block;padding: 10px;}
+.u-button-1:hover{background-color: #eee;cursor: pointer;}

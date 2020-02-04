@@ -153,6 +153,15 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 
 ##### 2020.02.02
 1. 实现二级回复功能的前端逻辑，对接口重构
+2. 修复了一下bug
+3. 完成question页面的标签的显示，相关问题的显示
+
+##### 2020.02.03
+1. 完成标签的添加
+
+##### 2020.02.04 
+1. 完成消息提示
+
 
 ### 记录问题  
 * 在写hello world时要用到模本thymeleaf，注意引用正确
@@ -171,6 +180,7 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
         <version>1.3.0</version>
     </dependency>
     <!--修正版本-->
+
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-thymeleaf</artifactId>

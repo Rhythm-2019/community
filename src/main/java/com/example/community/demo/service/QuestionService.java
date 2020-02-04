@@ -13,8 +13,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -34,7 +37,10 @@ public class QuestionService {
         Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
         paginationDTO.setPagination(totalCount,page, size);
         //先查一下question表，返回一个列表
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(size * (paginationDTO.getPage() - 1), size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria();
+        questionExample.setOrderByClause("GMT_CREATE DESC");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(size * (paginationDTO.getPage() - 1), size));
         //新建负责组装两个表格的dto列表
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : questionList) {
@@ -55,12 +61,13 @@ public class QuestionService {
         PaginationDTO paginationDTO = new PaginationDTO();
         //这里由于需要一些处理，所以不直接set了
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId);
         Integer totalCount =(int) questionMapper.countByExample(example);
         paginationDTO.setPagination(totalCount,page,size);
         //先查一下question表，返回一个列表
         QuestionExample example1 = new QuestionExample();
         example.createCriteria().andIdEqualTo(userId);
+        example.setOrderByClause("GMT_CREATE DESC");
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds());
         //新建负责组装两个表格的dto列表
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
@@ -118,5 +125,31 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incView(question);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+
+        if(questionDTO.getTag() == null || "".equals(questionDTO.getTag())){
+            throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NO_FOUND);
+        }
+        //可以这样写
+        //questionDTO.getTag().replace(",","|")
+
+        String[] tags = questionDTO.getTag().split(",");
+        //拼接出正则表达式
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(regexpTag);
+        //调用自定义的mapper
+        List<Question> questions = questionExtMapper.selectTag(question);
+        //把question转换为dto
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO1 = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO1);
+            return questionDTO1;
+        }).collect(Collectors.toList());
+        return questionDTOS;
+
     }
 }

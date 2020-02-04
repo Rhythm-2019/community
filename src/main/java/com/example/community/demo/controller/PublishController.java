@@ -1,5 +1,6 @@
 package com.example.community.demo.controller;
 
+import com.example.community.demo.cache.TagCache;
 import com.example.community.demo.dto.GitHubUserDTO;
 import com.example.community.demo.dto.QuestionDTO;
 import com.example.community.demo.mapper.QuestionMapper;
@@ -25,7 +26,9 @@ public class PublishController {
     private QuestionMapper questionMapper;
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("categorys", TagCache.get());
+
         return "publish";
     }
 
@@ -54,7 +57,11 @@ public class PublishController {
             model.addAttribute("error", new String(("标签不能为空")));
             return "publish";
         }
-
+        String tagInValid = TagCache.filterIsValid(tag);
+        if (!"".equals(tagInValid) || tagInValid != null){
+            model.addAttribute("error", new String(("不合法的标签：" + tagInValid)));
+            return "publish";
+        }
 
         GitHubUserDTO gitHubUserDTO = (GitHubUserDTO) request.getSession().getAttribute("userInfo");
 
@@ -87,6 +94,7 @@ public class PublishController {
         model.addAttribute("title",questionDTO.getTitle());
         model.addAttribute("desc",questionDTO.getDescription());
         model.addAttribute("tag",questionDTO.getTag());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 

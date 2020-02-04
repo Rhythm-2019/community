@@ -17,27 +17,37 @@
 <div th:insert="~{navigation :: nav}"></div>
 <div class="f-bcw g-main container">
     <div class="g-left f-brcg col-xs-12 col-sm-12 col-md-12 col-lg-9">
-        <h2 th:text="${question.title}"></h2>
-
-        <p class="f-cg">
-            作者&nbsp <span th:text="${question.user.name}"></span> &nbsp
-            回复&nbsp <span th:text="${question.commentCount}"></span> &nbsp
-            浏览&nbsp <span th:text="${question.viewCount}"></span> &nbsp
-            喜欢&nbsp <span th:text="${question.likeCount}"></span> &nbsp&nbsp
-            <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></spqn>
-        </p>
+        <!--文章内容 begin-->
+       <div>
+           <h2 th:text="${question.title}"></h2>
+           <p class="f-cg">
+               作者&nbsp <span th:text="${question.user.name}"></span> &nbsp
+               回复&nbsp <span th:text="${question.commentCount}"></span> &nbsp
+               浏览&nbsp <span th:text="${question.viewCount}"></span> &nbsp
+               喜欢&nbsp <span th:text="${question.likeCount}"></span> &nbsp&nbsp
+               <spqn th:text="${#calendars.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></spqn>
+           </p>
+           <!-- 标签 begin-->
+           <div class="g-tag">
+               <span class="label label-primary f-fs15 f-mt20 f-mr10" th:each="tag:${question.tag.split(',')}" th:text="${tag}"></span>
+           </div>
+           <hr/>
+           <!-- 标签 end-->
+           <!-- 内容 begin-->
+           <div>
+               <p class="u-content" th:text="${question.description}"></p>
+           </div>
+           <!--内容 begin-->
+           <!--编辑按钮 begin-->
+           <div th:if="${session.userInfo != null}">
+               <div th:if="${session.userInfo.id == question.user.id}">
+                   <a th:href="@{'/publish/'+${question.id}}" class="f-cb"><span class="glyphicon glyphicon-pencil"></span>&nbsp编辑</a>
+               </div>
+           </div>
+           <!--编辑按钮 end-->
+       </div>
+        <!--文章内容 end-->
         <hr/>
-        <div>
-            <p class="u-content" th:text="${question.description}"></p>
-        </div>
-        <hr/>
-        <span th:if="${session.userInfo != null}">
-            <div th:if="${session.userInfo.id == question.user.id}">
-                <a th:href="@{'/publish/'+${question.id}}" class="f-cb"><span class="glyphicon glyphicon-pencil"></span>&nbsp编辑</a>
-            </div>
-        </span>
-        <hr/>
-
         <!-- 评论  begin -->
         <div class="">
             <h3><span th:text="${question.commentCount}"></span>个评论</h3>
@@ -56,13 +66,25 @@
                         </p>
                         <p class="f-fs15 f-wbwa u-content" th:text="${commentDTO.comment}"></p>
                         <ul class="nav nav-pills" role="tablist">
-                            <li role="presentation" class="f-fs12"><a href="#">点赞</a></li>
-                            <li role="presentation" class="f-fs12"><a href="#">回复</a></li>
-
+                            <li role="presentation" class="f-fs12 j-comment2-open">
+                                <span th:data-id="${commentDTO.id}" th:data-status="${'off'}" onclick="openCollapse(this)"
+                                      class="u-button-1">回复 <span th:text="${commentDTO.commentCount}"></span></span>
+                            </li>
+                            <li role="presentation" class="f-fs12"><span class="u-button-1">喜欢 <span th:text="${commentDTO.likeCount}"></span></span></li>
                         </ul>
+                        <!--二级回复 begin-->
+                        <div class="collapse" th:id="'commentbox-'+${commentDTO.id}">
+                            <div class="g-well f-bcw j-reply-list" th:id="'reply-list-'+ ${commentDTO.id}">
+                            </div>
+                            <div class="f-m10">
+                                <input type="text" class="form-control" placeholder="Comment" th:id="'reply-' + ${commentDTO.id}"
+                                       aria-describedby="basic-addon1">
+                                <button type="submit" class="btn btn-success f-fr u-button-submit" th:data-id="${commentDTO.id}"
+                                         onclick="submitReply(this)">回复</button>
+                            </div>
+                        </div>
+                        <!--二级回复 end-->
                     </h4>
-                    <p class="f-cg">
-                    </p>
                 </div>
             </div>
         </div>
@@ -97,6 +119,12 @@
                 <img th:src="${question.user.avatarUrl}" class="img-circle u-img-logo f-m10" alt="头像">
                 <span th:text="${question.user.name}"></span>
             </div>
+        </div>
+        <div>
+            <h3>相关问题</h3>
+            <ul th:each="about : ${aboutList}">
+                <li><a th:href="@{'/question/' + ${about.id}}"  th:text="${about.title}"></a></li>
+            </ul>
         </div>
 
     </div>

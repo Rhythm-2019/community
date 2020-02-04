@@ -5,9 +5,10 @@ import com.example.community.demo.exception.CustomizeException;
 import lombok.Data;
 
 @Data
-public class ResultDTO {
+public class ResultDTO<T> {
     private String message;
     private Integer code;
+    private T data;
 
 
     public static ResultDTO errorOf(Integer code, String message){
@@ -22,7 +23,15 @@ public class ResultDTO {
         return errorOf(noLogin.getCode(), noLogin.getMessage());
     }
 
-    public static ResultDTO okOf() {
+    public static <T> ResultDTO okOf(T t) {
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.message = "请求成功";
+        resultDTO.code = 200;
+        resultDTO.data = t;
+        return resultDTO;
+
+    }
+    public static  ResultDTO okOf() {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.message = "请求成功";
         resultDTO.code = 200;

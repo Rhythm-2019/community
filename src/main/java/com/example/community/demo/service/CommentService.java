@@ -1,14 +1,10 @@
 package com.example.community.demo.service;
 
 import com.example.community.demo.dto.CommentDTO;
-import com.example.community.demo.dto.ResultDTO;
 import com.example.community.demo.enums.CommentTypeEnum;
 import com.example.community.demo.exception.CustomizeErrorCode;
 import com.example.community.demo.exception.CustomizeException;
-import com.example.community.demo.mapper.CommentMapper;
-import com.example.community.demo.mapper.QuestionExtMapper;
-import com.example.community.demo.mapper.QuestionMapper;
-import com.example.community.demo.mapper.UserMapper;
+import com.example.community.demo.mapper.*;
 import com.example.community.demo.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +31,9 @@ public class CommentService {
     @Autowired(required = false)
     private UserMapper userMapper;
 
+    @Autowired(required = false)
+    private CommentExtMapper commentExtMapper;
+
     @Transactional
     public void insertComment(Comment comment) {
         if( comment.getComment() == null || comment.getParentId() == null){
@@ -51,12 +50,17 @@ public class CommentService {
 
         if(comment.getType() == CommentTypeEnum.COMMENT.getType()){
             //回复评论
-            Comment comment1 = commentMapper.selectByPrimaryKey(comment.getId());
+            Comment comment1 = commentMapper.selectByPrimaryKey(comment.getParentId());
             if(comment1 == null) {
                 //找不到这一条评论
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NO_FOUND);
             }
-            commentMapper.insert(comment1);
+            commentMapper.insert(comment);
+            //添加阅读数
+            Comment incComment = new Comment();
+            incComment.setId(comment.getParentId());
+            incComment.setCommentCount(1);
+            commentExtMapper.incComment(incComment);
 
         }else{
             //回复问题
@@ -74,14 +78,16 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuestionId(Integer id) {
+    public List<CommentDTO> listByQuestionId(Integer id, CommentTypeEnum type) {
         //先查一下是否有这个问题
         //可以通过sql联表查询实现，这里用集合的方式实现
         //思路大概是这样子的
         //查一下所有的评论
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
-                .andParentIdEqualTo(id);
+                .andParentIdEqualTo(id)
+                .andTypeEqualTo(type.getType());
+        commentExample.setOrderByClause("gmt_modified desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         if(comments.size() == 0){

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" th:href="@{/css/community.css}" href="css/community.css" type="text/css">
-
+    <script src="/js/community.js"></script>
 
 </head>
 <body class="f-bcg">
@@ -24,22 +24,41 @@
             <input type="hidden" name="id" id="id" th:value="${id}">
             <div class="form-group">
                 <label for="title">标题</label>
-                <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="请输入标题">
+                <input type="text" autocomplete="off" class="form-control" id="title" name="title" th:value="${title}" placeholder="请输入标题">
             </div>
             <div class="form-group">
                 <label for="content">问题详细</label>
                 <textarea class="form-control" name="desc" id="content" cols="30" rows="10" th:text="${desc}"></textarea>
             </div>
             <div class="form-group">
-                <label for="tag">标签</label>
-                <input type="text" class="form-control" name="tag" id="tag" th:value="${tag}" placeholder="请输入标签">
+                <label >标签</label>
+                <input type="text" autocomplete="off" class="form-control" name="tag" id="tag-input" th:value="${tag}"
+                       placeholder="请输入标签，用英文逗号分隔" onclick="openTagBox()" onblur="">
             </div>
             <div class="f-fl col-xs-12 col-sm-12 col-md-12 col-lg-9 alert f-p5px">
                 <p class="bg-danger f-cr" th:text="${error}"></p>
             </div>
+            <div class="f-pa f-dn f-maxw500 f-bs f-bcw f-m10" id="tag-box">
+                <ul class="nav nav-tabs f-mb20 " >
+                    <li role="presentation" th:each="category,catagoryState: ${categorys}"
+                        onclick="selectTag(this)" class="tag-label" th:data-type="${catagoryState.index}">
+                        <a href="####" th:text="${category.categoryName}"
+                           ></a>
+                    </li>
+                </ul>
+                <span th:each="category,catagoryState: ${categorys}">
+                     <span id="tag_content" th:each="tag:${category.tags}" >
+                        <span onclick="addTag(this)" th:text="${tag}"
+                              th:class="'f-dib label label-primary f-fs15 f-mt20 f-m10 f-cp tag tag-'+${catagoryState.index}"
+                              ></span>
+                    </span>
+                </span>
+
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 f-fr">
                 <button type="submit" class="btn btn-success f-w100 u-button-submit">发送</button>
             </div>
+
         </form>
     </div>
     <div class="g-right col-xs-12 col-sm-12 col-md-12 col-lg-3">
