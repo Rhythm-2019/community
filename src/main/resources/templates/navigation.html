@@ -28,10 +28,15 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/publish">发布</a></li>
                     <li>
-                        <a href="https://github.com/login/oauth/authorize?client_id=46292375f7531e51a887&redirect_uri=http://localhost:8080/callback&scope=user&state=1"
+
+                        <a th:href="@{'https://github.com/login/oauth/authorize'(client_id=${'46292375f7531e51a887'},
+                            redirect_uri=${#httpServletRequest.getRequestURL()+'callback'},scope=${'user'},state=${'1'})}"
                            th:if="${session.userInfo} == null"
-                           th:text="Login"></a>
+                           th:text="Login">
+                        </a>
+
                     </li>
+
                     <li>
                         <a th:if="${session.userInfo} != null" href="/profile/reply">
                             <span  th:text="消息"></span>
