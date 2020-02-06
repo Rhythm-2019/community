@@ -9,6 +9,9 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     COMMENT_NO_FOUND(2005,"评论不存在，请重试！"),
     COMMENT_QUESTION_NO_FOUND(2006,"请求的问题不存在，请重试！"),
     COMMENT_NO_VALUE(2007,"评论不能为空，请重试！"),
+    NOTIFICATION_NOT_FOUND(2008,"通知不小心丢了"),
+    NO_ALLOW_READ(2009,"没有权限访问"),
+    UPLOAD_FAIL(2010,"上传实拍，未知的文件类型"),
     ;
 
     private String message;

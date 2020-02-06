@@ -42,6 +42,8 @@
 .f-bgs1{border:gray solid 1px;}
 
 .f-bs{box-shadow:0 0 9px 3px #999;}
+
+.f-zi999{z-index: 999;}
 /*CSS 样式 graph 布局*/
 .g-left{padding: 20px;}
 .g-right{padding: 20px;}

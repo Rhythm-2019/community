@@ -6,13 +6,18 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>社区</title>
-    <script src="/js/jquery-3.4.1.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" th:href="@{/css/community.css}" href="css/community.css" type="text/css">
+    <link rel="stylesheet" href="/css/editormd.min.css"/>
+    <link rel="stylesheet" href="/lib/codemirror/codemirror.min.css"/>
+    <link rel="stylesheet" href="/lib/codemirror/addon/dialog/dialog.css"/>
+    <link rel="stylesheet" href="/lib/codemirror/addon/search/matchesonscrollbar.css"/>
+    <script src="/js/jquery-3.4.1.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js"></script>
     <script src="/js/community.js"></script>
-
+    <script src="/lib/codemirror/codemirror.min.js"></script>
 </head>
 <body class="f-bcg">
 <div th:insert="~{navigation :: nav}"></div>
@@ -24,33 +29,50 @@
             <input type="hidden" name="id" id="id" th:value="${id}">
             <div class="form-group">
                 <label for="title">标题</label>
-                <input type="text" autocomplete="off" class="form-control" id="title" name="title" th:value="${title}" placeholder="请输入标题">
+                <input type="text" autocomplete="off" class="form-control" id="title" name="title" th:value="${title}"
+                       placeholder="请输入标题">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="editor">
                 <label for="content">问题详细</label>
-                <textarea class="form-control" name="desc" id="content" cols="30" rows="10" th:text="${desc}"></textarea>
+                <textarea class="form-control" style="display:none;" name="desc" id="content" cols="30" rows="10"
+                          th:text="${desc}"></textarea>
             </div>
+            <script type="text/javascript">
+                $(function () {
+                    var editor = editormd("editor", {
+                        width: "100%",
+                        height: "500px",
+                        watch: false,
+                        display:0,
+                        placeholder:"请输入内容",
+                        imageUpload: true,          // Enable/disable upload
+                        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                        imageUploadURL: "/file/upload",             // Upload url
+                        path: "/lib/"
+                    });
+                });
+            </script>
             <div class="form-group">
-                <label >标签</label>
+                <label>标签</label>
                 <input type="text" autocomplete="off" class="form-control" name="tag" id="tag-input" th:value="${tag}"
                        placeholder="请输入标签，用英文逗号分隔" onclick="openTagBox()" onblur="">
             </div>
             <div class="f-fl col-xs-12 col-sm-12 col-md-12 col-lg-9 alert f-p5px">
                 <p class="bg-danger f-cr" th:text="${error}"></p>
             </div>
-            <div class="f-pa f-dn f-maxw500 f-bs f-bcw f-m10" id="tag-box">
-                <ul class="nav nav-tabs f-mb20 " >
+            <div class="f-pa f-dn f-maxw500 f-bs f-bcw f-m10 f-zi999" id="tag-box">
+                <ul class="nav nav-tabs f-mb20 ">
                     <li role="presentation" th:each="category,catagoryState: ${categorys}"
                         onclick="selectTag(this)" class="tag-label" th:data-type="${catagoryState.index}">
                         <a href="####" th:text="${category.categoryName}"
-                           ></a>
+                        ></a>
                     </li>
                 </ul>
                 <span th:each="category,catagoryState: ${categorys}">
-                     <span id="tag_content" th:each="tag:${category.tags}" >
+                     <span id="tag_content" th:each="tag:${category.tags}">
                         <span onclick="addTag(this)" th:text="${tag}"
-                              th:class="'f-dib label label-primary f-fs15 f-mt20 f-m10 f-cp tag tag-'+${catagoryState.index}"
-                              ></span>
+                              th:class="'f-dib label label-primary f-fs15 f-mt20 f-m10 f-cp tag-all tag-'+${catagoryState.index}"
+                        ></span>
                     </span>
                 </span>
 
@@ -67,6 +89,8 @@
         • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
         • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>
     </div>
+
 </div>
+<div th:insert="~{foot::foot}"></div>
 </body>
 </html>

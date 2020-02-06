@@ -47,5 +47,32 @@
     select * from QUESTION WHERE TAG REGEXP #{tag,jdbcType=VARCHAR} AND `id` != #{id,jdbcType=INTEGER}
   </select>
 
+  <select id="select" parameterType="com.example.community.demo.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+
+    select * from QUESTION
+    <where>
+      <if test="keyword != null ">
+            TITLE REGEXP #{keyword,jdbcType=VARCHAR}
+      </if>
+    </where>
+    ORDER BY gmt_create DESC
+    LIMIT #{offset,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="countById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+
+    select count(1) from QUESTION WHERE `id` != #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="countBySearch" parameterType="java.lang.String" resultType="java.lang.Integer">
+
+    select count(1) from QUESTION WHERE TITLE REGEXP #{keyword,jdbcType=VARCHAR}
+  </select>
+
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) from QUESTION
+  </select>
+
 
 </mapper>

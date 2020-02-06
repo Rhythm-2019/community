@@ -2,6 +2,7 @@
 $(function () {
     //提问
     $('.j-comment-btn').click(function () {
+        console.log("到这了")
         var data ={
             parentId: $('.j-questionId').val(),
             type: 1,
@@ -23,6 +24,7 @@ $(function () {
 
 //增加回复/评论的接口方法
 function addCommentOrReply (data) {
+
     data = JSON.stringify(data);
     $.ajax({
 
@@ -159,6 +161,6 @@ function selectTag(e) {
     $(e).addClass("active");
     console.log($(e));
     //展示标签
-    $(".tag").hide();
+    $(".tag-all").hide();
     $('.tag-' + type).show();
 }

@@ -6,12 +6,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="${question.title}"></title>
-    <script src="/js/jquery-3.4.1.js"></script>
-    <script src="/js/community.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/css/community.css" type="text/css">
+    <link rel="stylesheet" href="/css/editormd.preview.css" type="text/css">
+    <script src="/js/jquery-3.4.1.js"></script>
+    <script src="/js/community.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="/lib/prettify.min.js"></script>
 </head>
 <body class="f-bcg">
 <div th:insert="~{navigation :: nav}"></div>
@@ -34,9 +38,19 @@
            <hr/>
            <!-- 标签 end-->
            <!-- 内容 begin-->
-           <div>
-               <p class="u-content" th:text="${question.description}"></p>
+           <div id="question-view">
+               <textarea class="u-content"  th:text="${question.description}"></textarea>
            </div>
+           <script type="text/javascript">
+               $(function() {
+                   var testView = editormd.markdownToHTML("question-view", {
+                       // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                       // htmlDecode : true,  // Enable / disable HTML tag encode.
+                       // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+
+                   });
+               });
+           </script>
            <!--内容 begin-->
            <!--编辑按钮 begin-->
            <div th:if="${session.userInfo != null}">
@@ -94,8 +108,8 @@
         <div class="j-comment-box">
             <div>
                 <div class="f-fr">
-                    <img th:src="${question.user.avatarUrl}" class="img-rounded u-img-logo f-m10" alt="头像">
-                    <span th:text="${question.user.name}"></span>
+                    <img th:src="${session.userInfo == null? '/images/deflatelogo.png':session.userInfo.avatarUrl}" class="img-rounded u-img-logo f-m10" alt="头像">
+                    <span th:text="${session.userInfo == null? '游客':session.userInfo.login}"></span>
                 </div>
                 <div class="f-fl">
                     <h3>发表评论</h3>
@@ -128,6 +142,8 @@
         </div>
 
     </div>
+
 </div>
+<div th:insert="~{foot::foot}"></div>
 </body>
 </html>

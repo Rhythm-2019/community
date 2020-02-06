@@ -1,9 +1,13 @@
 package com.example.community.demo.interceptor;
 
 import com.example.community.demo.dto.GitHubUserDTO;
+import com.example.community.demo.enums.NotificationStatusEnum;
+import com.example.community.demo.mapper.NotificationMapper;
 import com.example.community.demo.mapper.UserMapper;
+import com.example.community.demo.model.Notification;
 import com.example.community.demo.model.User;
 import com.example.community.demo.model.UserExample;
+import com.example.community.demo.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,9 +22,14 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
     private UserMapper userMapper;
+
+    @Autowired(required = false)
+    private NotificationService notificationService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //验证登录
         Cookie[] cookies = request.getCookies();
+        GitHubUserDTO gitHubUserDTO = new GitHubUserDTO();
         if(cookies != null){
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals("token")){
@@ -32,15 +41,18 @@ public class SessionInterceptor implements HandlerInterceptor {
 
                     if(users.size() != 0){
                         User userModel = users.get(0);
-                        GitHubUserDTO gitHubUserDTO = new GitHubUserDTO();
                         gitHubUserDTO.setLogin(userModel.getName());
                         gitHubUserDTO.setId(userModel.getId());
+                        Integer unRead = notificationService.countUnread(userModel.getId());
+                        request.getSession().setAttribute("unRead", unRead);
                         request.getSession().setAttribute("userInfo", gitHubUserDTO);
+
                         break;
                     }
 
                 }
             }
+
         }
         return true;
     }

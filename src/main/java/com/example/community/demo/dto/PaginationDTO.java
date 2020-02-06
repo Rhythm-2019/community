@@ -10,9 +10,10 @@ import java.util.List;
 
 
 @Data
-public class PaginationDTO {
+public class PaginationDTO<T> {
     //继续封装 这个list是给前端显示用的
-    private List<QuestionDTO> questionDTOS;
+    //因为后面又要用到，所以需要用泛型
+    private List<T> dataDTOS;
     //是否展示回到首页的按钮
     private boolean showFirstPage;
     //是否显示去往最后一页的按钮

@@ -4,7 +4,8 @@
 [Git](https://git-scm.com/)  
 [Maven 仓库](https://mvnrepository.com/)  
 [ProcessOn 时序图绘制](https://www.processon.com/)  
-[FastJSON]()
+[FastJSON]()  
+[Editor.md](http://editor.md.ipandao.com/)
 
 ### 文档
 [Spring serving web content 文档](https://spring.io/guides/gs/serving-web-content/)  
@@ -161,6 +162,14 @@ getaccesstoken携带code等4个字段以json格式模拟发送http请求从而�
 
 ##### 2020.02.04 
 1. 完成消息提示
+2. 加入Editor.md  
+
+##### 2020.02.05  
+1. 实现图片上传
+
+
+##### 2020.020.6
+1. 完成搜索功能、页尾、日志
 
 
 ### 记录问题  

@@ -23,13 +23,17 @@ public class IndexController {
     public String index(HttpServletRequest request,
                         @RequestParam(name = "page",defaultValue = "1") Integer page,
                         @RequestParam(name = "size",defaultValue = "5") Integer size,
+                        @RequestParam(name = "keyword",required = false) String keyword,
                         Model model){
 
         //加载列表,这里还要继续封装，吧页面的页数也放进去
-       PaginationDTO paginationDTO = questionService.list(page, size);
+       PaginationDTO paginationDTO = questionService.list(page, size, keyword);
 
         //返回前端
         model.addAttribute("pagination",paginationDTO);
+        if(keyword != null){
+            model.addAttribute("keyword",keyword);
+        }
 
         return "index";
     }

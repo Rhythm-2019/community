@@ -2,6 +2,8 @@ package com.example.community.demo.service;
 
 import com.example.community.demo.dto.CommentDTO;
 import com.example.community.demo.enums.CommentTypeEnum;
+import com.example.community.demo.enums.NotificationStatusEnum;
+import com.example.community.demo.enums.NotificationTypeEnum;
 import com.example.community.demo.exception.CustomizeErrorCode;
 import com.example.community.demo.exception.CustomizeException;
 import com.example.community.demo.mapper.*;
@@ -34,8 +36,11 @@ public class CommentService {
     @Autowired(required = false)
     private CommentExtMapper commentExtMapper;
 
+    @Autowired(required = false)
+    private NotificationMapper notificationMapper;
+
     @Transactional
-    public void insertComment(Comment comment) {
+    public void insertComment(Comment comment,String userName) {
         if( comment.getComment() == null || comment.getParentId() == null){
             //我觉得这种方式也行，可能是为了统一异常的处理才throw
             //return ResultDTO.errorOf(1001,"缺少参数！");
@@ -48,12 +53,19 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.COMMENT_TYPE_WRONG);
         }
 
+
+
         if(comment.getType() == CommentTypeEnum.COMMENT.getType()){
             //回复评论
-            Comment comment1 = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if(comment1 == null) {
+            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if(dbComment == null) {
                 //找不到这一条评论
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NO_FOUND);
+            }
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if(question == null) {
+                //找不到这个问题，无法进行操作
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_QUESTION_NO_FOUND);
             }
             commentMapper.insert(comment);
             //添加阅读数
@@ -61,21 +73,41 @@ public class CommentService {
             incComment.setId(comment.getParentId());
             incComment.setCommentCount(1);
             commentExtMapper.incComment(incComment);
+            createNotification(comment, dbComment.getCommentator(), NotificationTypeEnum.REPLY,userName,question.getTitle(), question.getId());
 
         }else{
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if(question == null) {
-                //找不到这一条评论
+                //找不到这个问题，无法进行操作
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_QUESTION_NO_FOUND);
             }
-
             //需要引入事务
             commentMapper.insert(comment);
             //添加评论数
             question.setCommentCount(1);
             questionExtMapper.incComment(question);
+
+            //创建通知
+            createNotification(comment, question.getCreator(), NotificationTypeEnum.COMMENT,userName,question.getTitle(), question.getId());
         }
+    }
+
+    public void createNotification(Comment comment, int receiver, NotificationTypeEnum type, String creator, String title, Integer outerId) {
+        if(receiver == comment.getCommentator()){
+            return;
+        }
+        //发送通知
+        Notification notification = new Notification();
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(type.getType());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setOuterId(outerId);
+        notification.setNotifierName(creator);
+        notification.setOuterName(title);
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByQuestionId(Integer id, CommentTypeEnum type) {

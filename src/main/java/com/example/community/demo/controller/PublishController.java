@@ -27,6 +27,7 @@ public class PublishController {
 
     @GetMapping("/publish")
     public String publish(Model model) {
+
         model.addAttribute("categorys", TagCache.get());
 
         return "publish";
@@ -43,7 +44,7 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("desc",desc);
         model.addAttribute("tag",tag);
-
+        model.addAttribute("categorys", TagCache.get());
         //前后端都要验证一下是否为空
         if (title == null || "".equals(title)) {
             model.addAttribute("error", new String(("标题不能为空")));
@@ -58,7 +59,7 @@ public class PublishController {
             return "publish";
         }
         String tagInValid = TagCache.filterIsValid(tag);
-        if (!"".equals(tagInValid) || tagInValid != null){
+        if (!("".equals(tagInValid) || tagInValid == null)){
             model.addAttribute("error", new String(("不合法的标签：" + tagInValid)));
             return "publish";
         }
@@ -95,6 +96,7 @@ public class PublishController {
         model.addAttribute("desc",questionDTO.getDescription());
         model.addAttribute("tag",questionDTO.getTag());
         model.addAttribute("tags", TagCache.get());
+        model.addAttribute("categorys", TagCache.get());
         return "publish";
     }
 

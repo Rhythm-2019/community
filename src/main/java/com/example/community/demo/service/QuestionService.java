@@ -2,6 +2,7 @@ package com.example.community.demo.service;
 
 import com.example.community.demo.dto.PaginationDTO;
 import com.example.community.demo.dto.QuestionDTO;
+import com.example.community.demo.dto.QuestionQueryDTO;
 import com.example.community.demo.exception.CustomizeErrorCode;
 import com.example.community.demo.exception.CustomizeException;
 import com.example.community.demo.mapper.QuestionExtMapper;
@@ -13,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,16 +31,30 @@ public class QuestionService {
     @Autowired(required = false)
     private QuestionExtMapper questionExtMapper;
 
-    public PaginationDTO list(Integer page, Integer size){
+    public PaginationDTO list(Integer page, Integer size, String keyword){
+        Integer totalCount;
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        if(!(keyword == null || "".equals(keyword))){
+            String[] split = keyword.split(" ");
+            String keywordRex = Arrays.stream(split).collect(Collectors.joining("|"));
+            totalCount = questionExtMapper.countBySearch(keywordRex);
+            questionQueryDTO.setKeyword(keywordRex);
+        }else{
+            totalCount = questionExtMapper.count();
+            keyword = null;
+        }
+
+        //封装一下
         PaginationDTO paginationDTO = new PaginationDTO();
+
         //这里由于需要一些处理，所以不直接set了
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
         paginationDTO.setPagination(totalCount,page, size);
         //先查一下question表，返回一个列表
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria();
-        questionExample.setOrderByClause("GMT_CREATE DESC");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(size * (paginationDTO.getPage() - 1), size));
+
+
+        questionQueryDTO.setOffset(size * (paginationDTO.getPage() - 1));
+        questionQueryDTO.setSize(size);
+        List<Question> questionList = questionExtMapper.select(questionQueryDTO);
         //新建负责组装两个表格的dto列表
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : questionList) {
@@ -53,22 +67,21 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        paginationDTO.setQuestionDTOS(questionDTOList);
+        paginationDTO.setDataDTOS(questionDTOList);
         return paginationDTO;
     };
 
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         //这里由于需要一些处理，所以不直接set了
-        QuestionExample example = new QuestionExample();
-        example.createCriteria().andCreatorEqualTo(userId);
-        Integer totalCount =(int) questionMapper.countByExample(example);
+        Integer totalCount = questionExtMapper.countById(userId);
         paginationDTO.setPagination(totalCount,page,size);
         //先查一下question表，返回一个列表
-        QuestionExample example1 = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
-        example.setOrderByClause("GMT_CREATE DESC");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds());
+        //先查一下question表，返回一个列表
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setOffset(size * (paginationDTO.getPage() - 1));
+        questionQueryDTO.setSize(size);
+        List<Question> questionList = questionExtMapper.select(questionQueryDTO);
         //新建负责组装两个表格的dto列表
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : questionList) {
@@ -81,7 +94,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        paginationDTO.setQuestionDTOS(questionDTOList);
+        paginationDTO.setDataDTOS(questionDTOList);
         return paginationDTO;
     }
 

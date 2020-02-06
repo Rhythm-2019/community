@@ -24,7 +24,7 @@
     <div class="g-left f-brcg col-xs-12 col-sm-12 col-md-12 col-lg-9">
         <h2><span class="glyphicon glyphicon-th-list"></span>&nbsp&nbsp发现</h2>
         <hr>
-        <div class="media" data-th-each="question : ${pagination.questionDTOS}">
+        <div class="media" data-th-each="question : ${pagination.dataDTOS}">
             <div class="media-left">
                 <a href="#">
                     <img class="media-object img-rounded u-img-logo" th:src="${question.user.avatarUrl}">
@@ -43,29 +43,29 @@
             </div>
 
         </div>
-        <div class="center-block">
+        <div class="center-block" th:if="${pagination.totalPages != 0}">
             <nav aria-label="Page navigation" class="f-m0a f-tac">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
-                        <a href="/?page=1" aria-label="Previous">
+                        <a th:href="@{/(page=${1},keyword=${keyword})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showPrevious}" >
-                        <a th:href="@{/(page=${pagination.page - 1})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pagination.page - 1},keyword=${keyword})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
                     <li th:each="page:${pagination.pages}" th:class="${pagination.page == page}? 'active':''">
-                        <a th:href="@{/(page=${page})}" th:text="${page}"></a></li>
+                        <a th:href="@{/(page=${page},keyword=${keyword})}" th:text="${page}"></a></li>
 
                     <li th:if="${pagination.showNext}">
-                        <a th:href="@{/(page=${pagination.page + 1})}" aria-label="Next">
+                        <a th:href="@{/(page=${pagination.page + 1},keyword=${keyword})}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showEndPage}">
-                        <a th:href="@{/(page=${pagination.totalPages})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pagination.totalPages},keyword=${keyword})}" aria-label="Previous">
                             <span aria-hidden="true">&gt&gt;</span>
                         </a>
                     </li>
@@ -77,5 +77,6 @@
         <h2>热门话题</h2>
     </div>
 </div>
+<div th:insert="~{foot::foot}"></div>
 </body>
 </html>
