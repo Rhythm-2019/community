@@ -121,7 +121,7 @@ function submitReply(e) {
 }
 function getTime(srcTime) {
     var tartime = new Date(srcTime);
-    return tartime.getFullYear() + "-" + tartime.getMonth() + "-" + tartime.getDate() + ' ' +
+    return tartime.getFullYear() + "-" + (tartime.getMonth()+1) + "-" + tartime.getDate() + ' ' +
             tartime.getHours() + ":" + tartime.getMinutes();
     
 }

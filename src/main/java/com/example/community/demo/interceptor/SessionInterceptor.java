@@ -43,6 +43,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                         User userModel = users.get(0);
                         gitHubUserDTO.setLogin(userModel.getName());
                         gitHubUserDTO.setId(userModel.getId());
+                        gitHubUserDTO.setAvatarUrl(userModel.getAvatarUrl());
                         Integer unRead = notificationService.countUnread(userModel.getId());
                         request.getSession().setAttribute("unRead", unRead);
                         request.getSession().setAttribute("userInfo", gitHubUserDTO);
