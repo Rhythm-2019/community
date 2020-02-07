@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.community.demo.dto.ResultDTO;
 import com.example.community.demo.exception.CustomizeErrorCode;
 import com.example.community.demo.exception.CustomizeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Slf4j
 @ControllerAdvice
 public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
@@ -49,6 +51,7 @@ public class CustomizeExceptionHandler {
             if (e instanceof CustomizeException){
                 model.addAttribute("message",e.getMessage());
             }else{
+                log.error("error:{}",e.getMessage());
                 model.addAttribute("message","服务器炸了，正在抢修您晚点再来吧！");
             }
 
