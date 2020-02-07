@@ -9,7 +9,7 @@ create table question
 	comment_count int default 0,
 	view_count int default 0,
 	like_count int default 0,
-	else varchar(256),
+	tag varchar(256),
 	constraint question_pk
 		primary key (id)
 );
