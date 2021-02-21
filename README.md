@@ -24,12 +24,6 @@
 GetMapping Controller Autowired Value Component RequestParam  Configuration
 
 
-* Git命令  
-git statue  
-git add .  
-git commit -m "something"  
-git push
-
 * 运行mybatis generator  
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ####  IDEA 快捷键  
